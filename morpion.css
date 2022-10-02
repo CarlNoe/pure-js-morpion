@@ -1,5 +1,7 @@
+/* Global CSS */
+
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background: linear-gradient(to bottom, #00d9ff 0%, #0d7edb 100%);
   min-height: 100vh;
 }
@@ -8,74 +10,123 @@ body {
   display: none !important;
 }
 
-#morpion {
-    min-height:100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+input[type="text"] {
+  padding: 12px 20px;
+  border: none;
+  background-color: #f1f1f1;
 }
 
+button {
+  background: greenyellow;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: white;
+  color: greenyellow;
+}
+
+select {
+  background-color: #0d7edb;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+#morpion {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Settings CSS */
+
 #game-settings {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    width: 100%;
-    height: 100%;
-    color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  color: white;
 }
 
 #game-settings h1 {
-    font-size: 4rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 #game-settings * {
-    margin: 10px 0;
+  margin: 10px 0;
+}
+
+/* Game CSS */
+
+#game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #game-grid {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.row {
-    display: flex;
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
 .cell {
-    min-width: 60px;
-    min-height: 60px;
-    background-color: #FFF;
-    border-radius: 10px;
-    margin: 5px;
+  min-width: 60px;
+  min-height: 60px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 5px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    font-size: 3rem;
-    font-weight: 700;
-    cursor: pointer;
+  font-size: 3rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 #score-bar {
-    color: #FFF;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0;
+
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.5rem;
 }
 
 #score-bar div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 150px;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 5px 10px;
+  background-color: greenyellow;
 }
