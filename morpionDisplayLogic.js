@@ -1,7 +1,6 @@
 //Todo: Split functions in another file
 
 let isPlayer1Turn = true;
-
 //todo: is it better to init gridSize and gameMode  and cellsAmountToWin as global vars or inside in initGameGrid ?
 //gameMode is either "simple" or "full"
 let gameMode = "simple";
@@ -69,36 +68,48 @@ const checkDiagonalWin = (currentCellX, currentCellY, currentCellSymbol, cellsAm
     return sameSymbolCount === cellsAmountToWin;
 }
 
-const resetGame = () => {
-    //todo: is it better to init globaly since the value doesnt change ?
-    const gameGrid = document.querySelector("#game-grid");
-    if (window.confirm("Do you want to play again ?")) {
-        gameGrid.innerHTML = "";
-        initGameGrid();
-    } else {
-        gameGrid.innerHTML = "";
-        toggleGameDisplay();
-    }
+const checkTie = () => {
+    const cells = document.querySelectorAll('.cell');
+    let isTie = true;
+
+    cells.forEach(cell => {
+        if (cell.innerText === "") {
+            isTie = false;
+        }
+    });
+
+    return isTie;
 }
 
-//Todo: check what copilot did and modify it
-const checkWin = (currentCell, gameMode) => {
+const relaunchGame = () => {
+    //todo: is it better to init globaly since the value doesnt change ?
+    const gameGrid = document.querySelector("#game-grid");
+
+    gameGrid.innerHTML = "";
+    initGameGrid();
+    toggleRelaunchPopupDisplay();
+}
+
+const finishGame = () => {
+    toggleGameDisplay();
+    toggleRelaunchPopupDisplay();
+}
+
+const checkWin = (currentCell) => {
     const currentCellX = parseInt(currentCell.id.split('-')[1]);
     const currentCellY = parseInt(currentCell.id.split('-')[2]);
     const currentCellSymbol = currentCell.innerText;
 
-    console.log(gameMode);
-    console.log(gridSize);
-    console.log(cellsAmountToWin);
-    console.log(currentCellX, currentCellY, currentCellSymbol);
-
-    if (checkColumnWin(currentCellX, currentCellY, currentCellSymbol, cellsAmountToWin) ||
+    let winningConditionMet =
+        checkColumnWin(currentCellX, currentCellY, currentCellSymbol, cellsAmountToWin) ||
         checkRowWin(currentCellX, currentCellY, currentCellSymbol, cellsAmountToWin) ||
-        checkDiagonalWin(currentCellX, currentCellY, currentCellSymbol, cellsAmountToWin)) {
+        checkDiagonalWin(currentCellX, currentCellY, currentCellSymbol, cellsAmountToWin);
 
-        alert(`Player ${isPlayer1Turn ? 1 : 2} won !`);
+    if (winningConditionMet) {
+        toggleRelaunchPopupDisplay(`Player ${isPlayer1Turn ? 1 : 2} won !`);
         incrementScore(isPlayer1Turn ? "player1" : "player2");
-        resetGame();
+    } else if (checkTie()) {
+        toggleRelaunchPopupDisplay("It's a tie !");
     }
 
 }
@@ -107,19 +118,33 @@ const changePlayerTurn = () => {
     isPlayer1Turn = !isPlayer1Turn;
 }
 
-const addSymbolOnClick = (event) => {
-    const cell = event.target;
+const addSymbolInCell = (cell) => {
     const symbol = isPlayer1Turn ? "X" : "O";
 
     cell.innerText = symbol;
-    cell.removeEventListener('click', addSymbolOnClick);
+    cell.removeEventListener('click', handleCellOnClick);
+}
 
+const handleCellOnClick = (event) => {
+    const cell = event.target;
+
+    addSymbolInCell(cell);
     changePlayerTurn();
-
-    checkWin(event.target, gameMode);
+    checkWin(cell, gameMode);
 }
 
 // DISPLAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+
+const toggleRelaunchPopupDisplay = (gameStateText) => {
+    const relaunchPopup = document.querySelector("#relaunch-game-popup");
+    relaunchPopup.classList.toggle("hidden");
+    
+    const gameStateTextSpan = document.querySelector("#relaunch-game-popup-gamestate");
+    
+    if (gameStateText) {
+        gameStateTextSpan.innerText = gameStateText;
+    }
+}
 
 const toggleGameDisplay = () => {
     const game = document.querySelector('#game');
@@ -138,7 +163,7 @@ const createGridCells = (x, y) => {
     const cell = document.createElement('div');
     cell.classList.add('cell');
     cell.id = `cell-${x}-${y}`;
-    cell.addEventListener('click', addSymbolOnClick);
+    cell.addEventListener('click', handleCellOnClick);
 
     return cell;
 }
@@ -149,12 +174,10 @@ const createGridColumns = (gridSize) => {
     for (let i = 0; i < gridSize; i++) {
         const column = document.createElement('div');
         column.classList.add('column');
-
         for (let j = 0; j < gridSize; j++) {
             const cell = createGridCells(i, j);
             column.appendChild(cell);
         }
-
         columnContainer.push(column);
     }
 
@@ -189,7 +212,7 @@ const initScoreBar = () => {
     player2NameSpan.textContent = player2Name;
 }
 
-const initGame = () => {
+const initGameOnClick = () => {
     initGameGrid();
     toggleGameDisplay();
     initScoreBar();
@@ -197,6 +220,11 @@ const initGame = () => {
 
 /////////////////////////////////////////////////////////////////////////////
 
-
 const startButton = document.getElementById('start');
-startButton.addEventListener('click', initGame);
+startButton.addEventListener('click', initGameOnClick);
+
+const relaunchGameYes = document.querySelector("#relaunch-game-yes");
+const relaunchGameNo = document.querySelector("#relaunch-game-no");
+
+relaunchGameYes.addEventListener('click', relaunchGame);
+relaunchGameNo.addEventListener('click', finishGame);
