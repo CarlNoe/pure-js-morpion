@@ -8,7 +8,7 @@
     <title>Morpion</title>
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="morpion.css">
-    <script src="morpionDisplayLogic.js" defer></script>
+    <script src="morpion.js" defer></script>
 </head>
 
 <body>
@@ -17,10 +17,13 @@
 
             <h1>Morpion</h1>
             <div id="player-name-container">
-                <input type="text" id="player1" placeholder="Player 1 Name">
-                <input type="text" id="player2" placeholder="Player 2 Name">
+                <input type="text" id="player1-name" placeholder="Player 1 name">
+                <input type="text" id="player2-name" placeholder="Player 2 name">
             </div>
-
+            <div id="player-symbol-container">
+                <input type="text" name="player1-symbol-selector" id="player1-symbol-selector" maxlength="1" placeholder="Player1 symbol (default: O)">
+                <input type="text" name="player2-symbol-selector" id="player2-symbol-selector" maxlength="1" placeholder="Player2 symbol (default: X)">
+            </div>
             <p>Choose your table size !</p>
             <select name="grid-size-selector" id="grid-size-selector">
                 <option value="3">3x3</option>

@@ -1,19 +1,25 @@
-//Todo: Split functions in another file
+
+/* 
+    Global vars
+*/
 
 let isPlayer1Turn = true;
-//todo: is it better to init gridSize and gameMode  and cellsAmountToWin as global vars or inside in initGameGrid ?
 //gameMode is either "simple" or "full"
 let gameMode = "simple";
 let gridSize = 0;
 let cellsAmountToWin = 3;
+let player1Symbol = "O";
+let player2Symbol = "X";
+
+/* 
+    Game logic
+*/
 
 const incrementScore = (player) => {
-    try {
+    if (player === "player1" || player === "player2") {
         const playerScoreSpan = document.querySelector(`#${player}-score-value`);
         const playerScore = parseInt(playerScoreSpan.textContent);
         playerScoreSpan.textContent = playerScore + 1;
-    } catch (error) {
-        console.error("incrementScore is called using something else than 'player1' or 'player2'", error);
     }
 }
 
@@ -59,6 +65,7 @@ const checkDiagonalWin = (currentCellX, currentCellY, currentCellSymbol, cellsAm
             const topLeftCell = document.querySelector(`#cell-${currentCellX - i}-${currentCellY - i}`);
             topLeftCell && topLeftCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
         }
+        //For the reverse diagonal if we add the x and y we should get the same result as the grid size
     } else if (currentCellX + currentCellY === gridSize - 1) {
         for (let i = 1; i < cellsAmountToWin; i++) {
             //Check top right diagonal
@@ -87,16 +94,10 @@ const checkTie = () => {
 }
 
 const relaunchGame = () => {
-    //todo: is it better to init globaly since the value doesnt change ?
     const gameGrid = document.querySelector("#game-grid");
 
     gameGrid.innerHTML = "";
     initGameGrid();
-    toggleRelaunchPopupDisplay();
-}
-
-const finishGame = () => {
-    toggleGameDisplay();
     toggleRelaunchPopupDisplay();
 }
 
@@ -124,7 +125,7 @@ const changePlayerTurn = () => {
 }
 
 const addSymbolInCell = (cell) => {
-    const symbol = isPlayer1Turn ? "X" : "O";
+    const symbol = isPlayer1Turn ? player1Symbol : player2Symbol;
 
     cell.innerText = symbol;
     cell.removeEventListener('click', handleCellOnClick);
@@ -138,7 +139,9 @@ const handleCellOnClick = (event) => {
     checkWin(cell, gameMode);
 }
 
-// DISPLAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+/* 
+    Display logic
+*/
 
 const toggleRelaunchPopupDisplay = (gameStateText) => {
     const relaunchPopup = document.querySelector("#relaunch-game-popup");
@@ -189,12 +192,23 @@ const createGridColumns = (gridSize) => {
     return columnContainer;
 }
 
-const initGameGrid = () => {
-    //todo: check if there is a better way to init those vars
-    gridSize = parseInt(document.querySelector('#grid-size-selector').value);
+const setGameData = () => {
+    const player1NameInput = document.querySelector('#player1-name');
+    const player2NameInput = document.querySelector('#player2-name');
+    const player1SymbolInput = document.querySelector('#player1-symbol-selector');
+    const player2SymbolInput = document.querySelector('#player2-symbol-selector');
+
     gameMode = document.querySelector('#game-mode-selector').value;
+    gridSize = parseInt(document.querySelector('#grid-size-selector').value);
     cellsAmountToWin = gameMode === "simple" ? 3 : gridSize;
 
+    player1Name = player1NameInput.value ? player1NameInput.value : "Player 1";
+    player2Name = player2NameInput.value ? player2NameInput.value : "Player 2";
+    player1Symbol = player1SymbolInput.value ? player1SymbolInput.value : "O";
+    player2Symbol = player2SymbolInput.value ? player2SymbolInput.value : "X";
+}
+
+const initGameGrid = () => {
     const gameGrid = document.querySelector('#game-grid');
     const columnContainer = createGridColumns(gridSize);
 
@@ -203,9 +217,6 @@ const initGameGrid = () => {
 }
 
 const initScoreBar = () => {
-    const player1Name = document.querySelector('#player1').value;
-    const player2Name = document.querySelector('#player2').value;
-
     const player1ScoreSpan = document.querySelector('#player1-score-value');
     const player2ScoreSpan = document.querySelector('#player2-score-value');
     const player1NameSpan = document.querySelector('#player1-score-name');
@@ -218,12 +229,20 @@ const initScoreBar = () => {
 }
 
 const initGameOnClick = () => {
+    setGameData();
     initGameGrid();
     toggleGameDisplay();
     initScoreBar();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+const finishGame = () => {
+    toggleGameDisplay();
+    toggleRelaunchPopupDisplay();
+}
+
+/* 
+    Function calls
+*/
 
 const startButton = document.getElementById('start');
 startButton.addEventListener('click', initGameOnClick);
