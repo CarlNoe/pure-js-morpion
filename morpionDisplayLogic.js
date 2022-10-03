@@ -22,11 +22,11 @@ const checkColumnWin = (currentCellX, currentCellY, currentCellSymbol, cellsAmou
 
     for (let i = 1; i < cellsAmountToWin; i++) {
         //Check bottom
-        const cellToCheck = document.querySelector(`#cell-${currentCellX}-${currentCellY + i}`);
-        cellToCheck && cellToCheck.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+        const bottomCell = document.querySelector(`#cell-${currentCellX}-${currentCellY + i}`);
+        bottomCell && bottomCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
         //Check top
-        const cellToCheck2 = document.querySelector(`#cell-${currentCellX}-${currentCellY - i}`);
-        cellToCheck2 && cellToCheck2.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+        const topCell = document.querySelector(`#cell-${currentCellX}-${currentCellY - i}`);
+        topCell && topCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
     }
 
     return sameSymbolCount === cellsAmountToWin;
@@ -37,11 +37,11 @@ const checkRowWin = (currentCellX, currentCellY, currentCellSymbol, cellsAmountT
 
     for (let i = 1; i < cellsAmountToWin; i++) {
         //Check right
-        const cellToCheck = document.querySelector(`#cell-${currentCellX + i}-${currentCellY}`);
-        cellToCheck && cellToCheck.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+        const rightCell = document.querySelector(`#cell-${currentCellX + i}-${currentCellY}`);
+        rightCell && rightCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
         //Check left
-        const cellToCheck2 = document.querySelector(`#cell-${currentCellX - i}-${currentCellY}`);
-        cellToCheck2 && cellToCheck2.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+        const leftCell = document.querySelector(`#cell-${currentCellX - i}-${currentCellY}`);
+        leftCell && leftCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
     }
 
     return sameSymbolCount === cellsAmountToWin;
@@ -50,19 +50,24 @@ const checkRowWin = (currentCellX, currentCellY, currentCellSymbol, cellsAmountT
 const checkDiagonalWin = (currentCellX, currentCellY, currentCellSymbol, cellsAmountToWin) => {
     let sameSymbolCount = 1;
 
-    for (let i = 1; i < cellsAmountToWin; i++) {
-        //Check bottom right diagonal
-        const cellToCheck = document.querySelector(`#cell-${currentCellX + i}-${currentCellY + i}`);
-        cellToCheck && cellToCheck.innerText === currentCellSymbol ? sameSymbolCount++ : null;
-        //Check top left diagonal
-        const cellToCheck2 = document.querySelector(`#cell-${currentCellX - i}-${currentCellY - i}`);
-        cellToCheck2 && cellToCheck2.innerText === currentCellSymbol ? sameSymbolCount++ : null;
-        //Check top right diagonal
-        const cellToCheck3 = document.querySelector(`#cell-${currentCellX + i}-${currentCellY - i}`);
-        cellToCheck3 && cellToCheck3.innerText === currentCellSymbol ? sameSymbolCount++ : null;
-        //Check bottom left diagonal
-        const cellToCheck4 = document.querySelector(`#cell-${currentCellX - i}-${currentCellY + i}`);
-        cellToCheck4 && cellToCheck4.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+    if (currentCellX === currentCellY) {
+        for (let i = 1; i < cellsAmountToWin; i++) {
+            //Check bottom right diagonal
+            const bottomRightCell = document.querySelector(`#cell-${currentCellX + i}-${currentCellY + i}`);
+            bottomRightCell && bottomRightCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+            //Check top left diagonal
+            const topLeftCell = document.querySelector(`#cell-${currentCellX - i}-${currentCellY - i}`);
+            topLeftCell && topLeftCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+        }
+    } else if (currentCellX + currentCellY === gridSize - 1) {
+        for (let i = 1; i < cellsAmountToWin; i++) {
+            //Check top right diagonal
+            const topRightCell = document.querySelector(`#cell-${currentCellX + i}-${currentCellY - i}`);
+            topRightCell && topRightCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+            //Check bottom left diagonal
+            const bottomLeftCell = document.querySelector(`#cell-${currentCellX - i}-${currentCellY + i}`);
+            bottomLeftCell && bottomLeftCell.innerText === currentCellSymbol ? sameSymbolCount++ : null;
+        }
     }
 
     return sameSymbolCount === cellsAmountToWin;
@@ -138,9 +143,9 @@ const handleCellOnClick = (event) => {
 const toggleRelaunchPopupDisplay = (gameStateText) => {
     const relaunchPopup = document.querySelector("#relaunch-game-popup");
     relaunchPopup.classList.toggle("hidden");
-    
+
     const gameStateTextSpan = document.querySelector("#relaunch-game-popup-gamestate");
-    
+
     if (gameStateText) {
         gameStateTextSpan.innerText = gameStateText;
     }
